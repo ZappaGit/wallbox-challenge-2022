@@ -10,8 +10,13 @@ jobs:
   first-create-env:
     runs-on: ubuntu-latest
     steps:
-      - name: echo a string
-        run: echo "Hello world"
+      - name: Listing some variables
+        run: |
+          echo $GITHUB_SHA
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+          echo "${{ github.token }}"
+
   build:
     runs-on: ubuntu-latest
     strategy:
