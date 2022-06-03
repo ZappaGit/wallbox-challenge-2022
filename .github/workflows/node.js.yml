@@ -7,6 +7,11 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
+  first-create-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo a string
+        run: echo "Hello world"
   build:
     runs-on: ubuntu-latest
     strategy:
