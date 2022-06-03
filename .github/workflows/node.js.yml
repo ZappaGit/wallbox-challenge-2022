@@ -31,6 +31,7 @@ jobs:
     - run: npm start &
     - run: npm test
     - run: kill -9 `lsof -i:3000 -t`
+    - run: cat .env
 
 
   deploy:
@@ -47,3 +48,5 @@ jobs:
         port: 80
         source: LICENSE
         target: LICENSE
+      run: |
+        ls -latr
