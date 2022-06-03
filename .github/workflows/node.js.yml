@@ -25,5 +25,5 @@ jobs:
         echo "SECRET_TOKEN=TEST" >> .env
     - run: |
         echo "SECRET_TOKEN=TEST" >> .env
-        ls -l
+        ls -latr
         npm start
