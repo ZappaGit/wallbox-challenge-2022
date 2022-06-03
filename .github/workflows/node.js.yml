@@ -28,3 +28,11 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm start
+
+  some-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Files
+        run: |
+          pwd
+          ls
