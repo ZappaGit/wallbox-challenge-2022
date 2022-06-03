@@ -52,7 +52,9 @@ jobs:
     - run: |
         npm run build --if-present
         echo "SECRET_TOKEN=TEST" >> .env
-    - run: npm start
+    - run: |
+        ls -l
+        npm start
 
   some-checks:
     runs-on: ubuntu-latest
