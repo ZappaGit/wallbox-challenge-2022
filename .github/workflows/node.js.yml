@@ -16,6 +16,8 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
           echo "${{ github.token }}"
+          echo "SECRET_TOKEN=TEST" >> .env
+          ls -l
       - uses: actions/checkout@v1
       
       - name: Make envfile
