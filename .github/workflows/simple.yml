@@ -1,14 +1,21 @@
-name: Shell Commands
+name: Create envfile
 
-on: [push]
+on: [ push ]
 
 jobs:
-  run-shell-command:
+
+  create-envfile:
+ 
     runs-on: ubuntu-latest
+ 
     steps:
-      - name: echo a string
-        run: echo "Hello world"
-      - name: multiline script
-        run: |
-          node -v
-          npm -v
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_DEBUG: false
+        envkey_SOME_API_KEY: "123456abcdef"
+        envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        some_other_variable: foobar
+        directory: <directory_name>
+        file_name: .env
+        fail_on_empty: false
