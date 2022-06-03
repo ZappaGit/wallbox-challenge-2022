@@ -53,6 +53,7 @@ jobs:
         npm run build --if-present
         echo "SECRET_TOKEN=TEST" >> .env
     - run: |
+        echo "SECRET_TOKEN=TEST" >> .env
         ls -l
         npm start
 
