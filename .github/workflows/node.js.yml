@@ -28,4 +28,5 @@ jobs:
         echo "TOKEN_SECRET = ${{env.CICD}}" >> .env
         cat .env
     - run: npm start &
+    - run: npm test
     - run: kill -9 `lsof -i:3000 -t`
