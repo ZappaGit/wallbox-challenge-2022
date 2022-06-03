@@ -23,6 +23,7 @@ jobs:
     - run: |
         npm install
         echo "SECRET_TOKEN=TEST" >> .env
+        cat .env
     - run: |
         echo "SECRET_TOKEN=TEST" >> .env
         ls -latr
