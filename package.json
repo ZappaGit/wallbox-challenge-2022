@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm install",
     "start": "node app.js",
-    "test": "mocha --config ./mocha.config",
+    "test": "mocha --config ./mocha.config --reporter mochawesome",
     "swagger-autogen": "node swagger.js"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
     "mocha": "^10.0.0",
+    "mochawesome": "^7.1.3",
     "swagger-autogen": "^2.18.8"
   }
 }

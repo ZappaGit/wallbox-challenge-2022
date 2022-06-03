@@ -22,6 +22,9 @@ lib-cov
 coverage
 *.lcov
 
+# mocha testing artifacts
+mochawesome-report
+
 # nyc test coverage
 .nyc_output
 
