@@ -23,5 +23,5 @@ jobs:
     - run: |
         npm install
         echo "TOKEN_SECRET = TEST" >> .env
-    - run: |
-        npm start
+    - run: npm start
+    - run: kill -9 `lsof -i:3000 -t`
