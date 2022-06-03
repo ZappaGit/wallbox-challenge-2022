@@ -23,6 +23,7 @@ jobs:
         cache: 'npm'
     - run: |
         npm install
-        echo "TOKEN_SECRET = TEST" >> .env
+        echo "TOKEN_SECRET = ${{TOKEN_SECRET}}" >> .env
+        cat .env
     - run: npm start &
     - run: kill -9 `lsof -i:3000 -t`
