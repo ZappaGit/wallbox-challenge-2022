@@ -48,5 +48,5 @@ jobs:
         port: 80
         source: LICENSE
         target: LICENSE
-      run: |
+    - run: |
         ls -latr
