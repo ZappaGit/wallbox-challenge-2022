@@ -16,6 +16,17 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
           echo "${{ github.token }}"
+      - uses: actions/checkout@v1
+      
+      - name: set environment variables
+        uses: allenevans/set-env@v2.0.0
+        with:
+          TOKEN_SECRET: 'myAppSuperSecret!'
+
+      - name: Printenv
+        run: |
+          echo "TOKEN_SECRET=${TOKEN_SECRET}"
+          printenv
 
   build:
     runs-on: ubuntu-latest
