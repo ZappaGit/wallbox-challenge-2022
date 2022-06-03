@@ -22,9 +22,8 @@ jobs:
         cache: 'npm'
     - run: |
         npm install
-        echo "SECRET_TOKEN=TEST" >> .env
+        echo "SECRET_TOKEN = TEST" >> .env
         cat .env
     - run: |
-        echo "SECRET_TOKEN=TEST" >> .env
-        ls -latr
+        cat .env
         npm start
