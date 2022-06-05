@@ -61,7 +61,7 @@ describe("signin operation", () => {
         res.body.uid.should.be.a("string");
         res.body.jwt.should.be.a("string");
         db("tokens").push({
-          token: res.body.jwt,
+          token: `token ${res.body.jwt}`,
           role: "user",
           timestamp: Date.now(),
         });
@@ -87,7 +87,7 @@ describe("signin operation", () => {
         res.body.uid.should.be.a("string");
         res.body.jwt.should.be.a("string");
         db("tokens").push({
-          token: res.body.jwt,
+          token: `token ${res.body.jwt}`,
           role: "admin",
           timestamp: Date.now(),
         });

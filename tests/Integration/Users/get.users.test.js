@@ -20,7 +20,7 @@ chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("get users operation requests", () => {
+describe("get-users operation requests", () => {
   let tokenAdmin, tokenUser;
 
   before(() => {
@@ -51,13 +51,13 @@ describe("get users operation requests", () => {
       });
   });
 
-  it("200 - OK for user", (done) => {
+  it("400 - Unexpected string", (done) => {
     request
       .get("/users")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
-      .send("authorization", tokenUser)
+      .send("something", "error")
       .end(function (err, res) {
         expect(res).to.have.status(400);
         expect(res).to.have.header(
@@ -65,7 +65,42 @@ describe("get users operation requests", () => {
           "application/json; charset=utf-8"
         );
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done(); // <= Call done to signal callback end
+      });
+  });
 
+  it("200 - OK for admin", (done) => {
+    request
+      .get("/users")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenAdmin)
+      .end(function (err, res) {
+        expect(res).to.have.status(200);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done(); // <= Call done to signal callback end
+      });
+  });
+
+  it("403 - OK for user", (done) => {
+    request
+      .get("/users")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenAdmin)
+      .end(function (err, res) {
+        res.should.have.status(403);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done(); // <= Call done to signal callback end
       });
   });
