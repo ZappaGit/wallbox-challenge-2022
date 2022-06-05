@@ -32,8 +32,9 @@ describe("get-users operation requests", () => {
     if (tokenUser) {
       tokenUser = tokenUser.token;
     }
+    db("users").remove();
   });
-  it("401 - bad request", (done) => {
+  it("401 - bad request /users", (done) => {
     request
       .get("/users")
       .set("accept", "application/json")
@@ -51,7 +52,7 @@ describe("get-users operation requests", () => {
       });
   });
 
-  it("400 - Unexpected string", (done) => {
+  it("400 - Unexpected string /users", (done) => {
     request
       .get("/users")
       .set("accept", "application/json")
@@ -69,7 +70,7 @@ describe("get-users operation requests", () => {
       });
   });
 
-  it("200 - OK for admin", (done) => {
+  it("200 - OK for admin over user /users", (done) => {
     request
       .get("/users")
       .set("accept", "application/json")
@@ -85,16 +86,15 @@ describe("get-users operation requests", () => {
         res.body.users
           .map((e) => e.role)
           .should.to.include.members(["admin", "user"]);
-        db("users").push({
-          list: res.body.users,
-          timestamp: Date.now(),
+        res.body.users.forEach((u) => {
+          db("users").push(u);
         });
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done();
       });
   });
 
-  it("200 - OK for user", (done) => {
+  it("200 - OK for user over user /users", (done) => {
     request
       .get("/users")
       .set("accept", "application/json")
