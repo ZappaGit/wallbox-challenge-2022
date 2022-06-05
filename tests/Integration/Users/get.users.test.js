@@ -82,25 +82,37 @@ describe("get-users operation requests", () => {
           "content-type",
           "application/json; charset=utf-8"
         );
+        res.body.users
+          .map((e) => e.role)
+          .should.to.include.members(["admin", "user"]);
+        db("users").push({
+          list: res.body.users,
+          timestamp: Date.now(),
+        });
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
+        done();
       });
   });
 
-  it("403 - OK for user", (done) => {
+  it("200 - OK for user", (done) => {
     request
       .get("/users")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
-      .set("authorization", tokenAdmin)
+      .set("authorization", tokenUser)
       .end(function (err, res) {
-        res.should.have.status(403);
+        res.should.have.status(200);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        res.body.users.map((e) => e.role).should.to.include.members(["user"]);
+        res.body.users
+          .map((e) => e.role)
+          .should.to.not.include.members(["admin"]);
+
         done(); // <= Call done to signal callback end
       });
   });

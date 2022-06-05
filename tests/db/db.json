@@ -1,14 +1,241 @@
 {
   "tokens": [
     {
-      "token": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI1V0FEMU1aUjNROVo5MEdNNCIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NDI5MTU3LCJleHAiOjE2NTQ0MzI3NTd9.8XJaIBamyMoft2tspaX7f-9I4d1nnPLuk8h9yy3DlKQ",
+      "token": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI1V0FEMU1aUjNROVo5MEdNNCIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NDM4ODYzLCJleHAiOjE2NTQ0NDI0NjN9.tI8YkCR_jBeqU6V1cPTytt4Y8MmjUNoBTfhdDAkgsyU",
       "role": "user",
-      "timestamp": 1654429157551
+      "timestamp": 1654438863600
     },
     {
-      "token": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI0TlFHMUg3MEQ0NEVWQzI3VyIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ0MjkxNTcsImV4cCI6MTY1NDQzMjc1N30.0y9XN9bsBgRH9e91Wewyn37cg_bsMzt0GUmJX-GMIzE",
+      "token": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI0TlFHMUg3MEQ0NEVWQzI3VyIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ0Mzg4NjMsImV4cCI6MTY1NDQ0MjQ2M30.VdxD9BX7Qi6jI87TYgmsvJzmyOWBiLmgHicrSvXO_m8",
       "role": "admin",
-      "timestamp": 1654429157558
+      "timestamp": 1654438863607
+    }
+  ],
+  "users": [
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654438879336
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439189709
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439367321
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439388443
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439424102
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439450440
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439475046
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439526277
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439594691
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439625608
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439647396
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439735268
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439767423
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439853921
+    },
+    {
+      "list": [
+        {
+          "uid": "01G4MYDZ24NQG1H70D44EVC27W",
+          "email": "admin@wallbox.com",
+          "role": "admin"
+        },
+        {
+          "uid": "01G4MYDZ25WAD1MZR3Q9Z90GM4",
+          "email": "user@wallbox.com",
+          "role": "user"
+        }
+      ],
+      "timestamp": 1654439871633
     }
   ]
 }
