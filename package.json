@@ -7,7 +7,7 @@
     "build": "npm install",
     "start": "node app.js",
     "tests": "mocha --config ./mocha.config --reporter mochawesome",
-    "test": "mocha --config ./mocha.config -g signin",
+    "test": "mocha --config ./mocha.config -g running",
     "swagger-autogen": "node swagger.js"
   },
   "repository": {
@@ -34,8 +34,10 @@
     "ulid": "^2.3.0"
   },
   "devDependencies": {
+    "@types/lowdb": "^1.0.11",
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
+    "lowdb": "^0.12.5",
     "mocha": "^10.0.0",
     "mochawesome": "^7.1.3",
     "swagger-autogen": "^2.18.8"
