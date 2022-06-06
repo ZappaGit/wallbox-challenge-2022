@@ -23,18 +23,33 @@ const fetchSinToken = async (endpoint, data, method = "GET") => {
 };
 
 const fetchToken = async (endpoint, data, method = "GET") => {
+  //console.log(endpoint, data, method);
   const url = `${baseUrl}/${endpoint}`;
 
   if (method === "GET") {
-    const resp = await fetch(url);
+    const resp = await fetch(url, {
+      headers: {
+        Authorization: data.token,
+      },
+    });
     return await resp.json();
   } else {
+    if (method === "DELETE") {
+      const resp = await fetch(url, {
+        headers: {
+          Authorization: data.token,
+        },
+      });
+      console.log(data.token);
+      return;
+    }
     const resp = await fetch(url, {
       method,
       headers: {
         "Content-type": "application/json",
+        Authorization: data.token,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data.data),
     });
 
     return await resp.json();

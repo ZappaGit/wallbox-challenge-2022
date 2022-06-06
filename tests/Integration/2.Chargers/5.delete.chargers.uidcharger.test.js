@@ -1,4 +1,4 @@
-/* TEST: delete.charger.uuiduser.test.js */
+/* TEST: delete.charger.uidcharger.test.js */
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
@@ -16,7 +16,7 @@ const request = chai.request(config.baseUrl);
 
 describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
   let tokenAdmin, tokenUser;
-  let uidAdmin, uidUser;
+  let charger;
 
   before(async () => {
     const respUser = await api.fetchSinToken(
@@ -34,12 +34,17 @@ describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
     );
     tokenAdmin = `token ${respAdmin.jwt}`;
     uidAdmin = respAdmin.uid;
-    //console.log(tokenAdmin, uidAdmin, tokenUser, uidUser);
+    const dataAdmin = { data: config.charger_ok_Commander4, token: tokenAdmin };
+
+    const respPulsarPlus = await api.fetchToken("chargers", dataAdmin, "POST");
+    // console.log(tokenAdmin);
+    // console.log(respPulsarPlus);
+    charger = respPulsarPlus.charger;
   });
 
-  it(`401 - bad request /chargers/{{uidAdmin}}`, (done) => {
+  it(`401 - bad request /chargers/{{uidcharger}}`, (done) => {
     request
-      .delete("/chargers/" + uidAdmin)
+      .delete("/chargers/" + charger.uid)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -55,11 +60,10 @@ describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
       });
   });
 
-  it("400 - Unexpected string admin over admin /chargers/{{uidAdmin}}", (done) => {
+  it("400 - Unexpected string admin over admin /chargers/{{uidcharger}}", (done) => {
     request
-      .delete("/chargers/" + uidAdmin)
+      .delete("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .send("something", "error")
@@ -73,11 +77,10 @@ describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
         done(); // <= Call done to signal callback end
       });
   });
-  it("400 - Unexpected string user over user /chargers/{{uidUser}}", (done) => {
+  it("400 - Unexpected string admin over charger /chargers/{{uidcharger}}", (done) => {
     request
-      .delete("/chargers/" + uidUser)
+      .delete("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenUser)
       .send("something", "error")
@@ -92,14 +95,13 @@ describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
       });
   });
 
-  it("401 - Insufficient permissions - for user over user /chargers", (done) => {
+  it("401 - Insufficient permissions - for user over charger /chargers", (done) => {
     request
-      .delete("/chargers/" + uidUser)
+      .delete("/chargers/" + charger.uid)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
       .set("authorization", tokenUser)
-      .send(config.user_ok_1)
+      .send()
       .end(function (err, res) {
         expect(res).to.have.status(401);
         expect(res).to.have.header(
@@ -113,46 +115,28 @@ describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
       });
   });
 
-  it("204 - OK for admin over user /chargers/{{uidUser}}", (done) => {
+  it("204 - OK - for admin over charger /chargers/{{uidcharger}}", (done) => {
     request
-      .delete("/chargers/" + uidUser)
+      .delete("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .end(function (err, res) {
         expect(res).to.have.status(204);
-
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done(); // <= Call done to signal callback end
       });
   });
 
-  it("404 - User not found for admin over user /chargers/{{uidUser}}", (done) => {
+  it("400 - Invalid value for charger, admin over charger /chargers/{{uidcharger}}", (done) => {
     request
-      .delete("/chargers/" + uidUser)
+      .delete("/chargers/" + "0001")
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .end(function (err, res) {
-        expect(res).to.have.status(404);
-        res.body.message.should.be.eql("User not found");
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
-      });
-  });
-
-  it("401 - Could not verify token, for admin over admin  /chargers/{{uidAdmin}}", (done) => {
-    request
-      .delete("/chargers/" + uidAdmin)
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenAdmin)
-      .end(function (err, res) {
-        expect(res).to.have.status(401);
-        res.body.message.should.be.eql("Could not verify token");
+        expect(res).to.have.status(400);
+        console.log(res.body);
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done(); // <= Call done to signal callback end
       });

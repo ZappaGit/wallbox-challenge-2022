@@ -14,27 +14,37 @@ chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("[7] POST -/chargers/{uidcharger/user/{uidcharger} operation requests", () => {
-  let tokenAdmin, tokenUser;
+describe("[7] POST -/chargers/{uidcharger}/users/{uiduser} operation requests", () => {
+  let tokenAdmin, tokenUser, uidUser;
+
+  let charger;
 
   before(async () => {
     const respUser = await api.fetchSinToken(
       "signin",
-      chargers.find((user) => user.role === "user"),
+      Users.find((user) => user.role === "user"),
       "POST"
     );
     tokenUser = `token ${respUser.jwt}`;
+    uidUser = respUser.uid;
     const respAdmin = await api.fetchSinToken(
       "signin",
-      chargers.find((user) => user.role === "admin"),
+      Users.find((user) => user.role === "admin"),
       "POST"
     );
     tokenAdmin = `token ${respAdmin.jwt}`;
+    const dataAdmin = { data: config.charger_ok_Commander2, token: tokenAdmin };
+
+    const respPulsarPlus = await api.fetchToken("chargers", dataAdmin, "POST");
+    // console.log(tokenAdmin);
+    //console.log(respPulsarPlus, uidUser);
+    charger = respPulsarPlus.charger;
   });
 
-  it("401 - bad request /chargers", (done) => {
+  it("401 - Invalid token /chargers/{uidcharger}/user/{uiduser}", (done) => {
+    console.log("/chargers/" + charger.uid + "/users/" + uidUser);
     request
-      .post("/chargers")
+      .post("/chargers/" + charger.uid + "/users/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -50,11 +60,10 @@ describe("[7] POST -/chargers/{uidcharger/user/{uidcharger} operation requests",
       });
   });
 
-  it("400 - Unexpected string /chargers", (done) => {
+  it("400 - Unexpected string /chargers/{uidcharger}/user/{uiduser}", (done) => {
     request
-      .post("/chargers")
+      .post("/chargers/" + charger.uid + "/users/" + uidUser)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .send("something", "error")
       .end(function (err, res) {
@@ -68,35 +77,34 @@ describe("[7] POST -/chargers/{uidcharger/user/{uidcharger} operation requests",
       });
   });
 
-  it("200 - OK for admin over user /chargers", (done) => {
+  it("200 - Allowed user to access charger - for admin over /chargers/{uidcharger}/user/{uiduser}", (done) => {
     request
-      .post("/chargers")
+      .post("/chargers/" + charger.uid + "/users/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
-      .send(config.user_ok_2)
+      .send()
       .end(function (err, res) {
         expect(res).to.have.status(200);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
-        res.body.message.should.be.eql("User registered");
+
+        res.body.message.should.be.eql("Allowed user to access charger");
 
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done();
       });
   });
 
-  it("401 - Insufficient permissions - for user over user /chargers", (done) => {
+  it("401 - Insufficient permissions - for user over user /chargers/{uidcharger}/user/{uiduser}", (done) => {
     request
-      .post("/chargers")
+      .post("/chargers/" + charger.uid + "/users/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
       .set("authorization", tokenUser)
-      .send(config.user_ok_1)
+      .send()
       .end(function (err, res) {
         expect(res).to.have.status(401);
         expect(res).to.have.header(
@@ -110,23 +118,22 @@ describe("[7] POST -/chargers/{uidcharger/user/{uidcharger} operation requests",
       });
   });
 
-  //   it("409 - OK for user over user /chargers", (done) => {
-  //     request
-  //       .post("/chargers")
-  //       .set("accept", "application/json")
-  //       .set("Content-Type", "application/json")
-  //       .set("Content-Type", "application/json")
-  //       .set("authorization", tokenUser)
-  //       .send(config.user_ok_2)
-  //       .end(function (err, res) {
-  //         res.should.have.status(200);
-  //         expect(res).to.have.header(
-  //           "content-type",
-  //           "application/json; charset=utf-8"
-  //         );
-  //         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-  //         res.body.message.should.be.eql("Email already in use");
-  //         done(); // <= Call done to signal callback end
-  //       });
-  //   });
+  it("403 - User already has access to charger for admin  /chargers/{uidcharger}/users/{uiduser}", (done) => {
+    request
+      .post("/chargers/" + charger.uid + "/users/" + uidUser)
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenAdmin)
+      .send()
+      .end(function (err, res) {
+        res.should.have.status(403);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        res.body.message.should.be.eql("User already has access to charger");
+        done(); // <= Call done to signal callback end
+      });
+  });
 });

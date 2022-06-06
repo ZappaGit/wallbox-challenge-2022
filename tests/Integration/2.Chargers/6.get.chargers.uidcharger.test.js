@@ -17,6 +17,7 @@ const request = chai.request(config.baseUrl);
 describe("[6] GET -/chargers/uidcharger operation requests", () => {
   let tokenAdmin, tokenUser;
   let uidAdmin, uidUser;
+  let charger;
 
   before(async () => {
     const respUser = await api.fetchSinToken(
@@ -33,11 +34,17 @@ describe("[6] GET -/chargers/uidcharger operation requests", () => {
     );
     tokenAdmin = `token ${respAdmin.jwt}`;
     uidAdmin = respAdmin.uid;
+    const dataAdmin = { data: config.charger_ok_Commander5, token: tokenAdmin };
+
+    const respPulsarPlus = await api.fetchToken("chargers", dataAdmin, "POST");
+    // console.log(tokenAdmin);
+    console.log(respPulsarPlus);
+    charger = respPulsarPlus.charger;
   });
 
-  it(`401 - bad request /chargers/{{uuidcharger}}`, (done) => {
+  it(`401 -  Invalid token /chargers/{{uuidcharger}}`, (done) => {
     request
-      .get("/chargers/" + uidAdmin)
+      .get("/chargers/" + charger.uid)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -55,9 +62,8 @@ describe("[6] GET -/chargers/uidcharger operation requests", () => {
 
   it("400 - Unexpected string admin over admin /chargers/{{uuidcharger}}", (done) => {
     request
-      .get("/chargers/" + uidAdmin)
+      .get("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .send("something", "error")
@@ -71,30 +77,11 @@ describe("[6] GET -/chargers/uidcharger operation requests", () => {
         done(); // <= Call done to signal callback end
       });
   });
-  it("400 - Unexpected string user over user /chargers/{{uidUser}}", (done) => {
-    request
-      .get("/chargers/" + uidUser)
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
-      .send("something", "error")
-      .end(function (err, res) {
-        expect(res).to.have.status(400);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
-      });
-  });
 
-  it("200 - OK for admin over user /chargers/{{uidUser}}", (done) => {
+  it("200 - OK for admin over charger /chargers/{{uuidcharger}}", (done) => {
     request
-      .get("/chargers/" + uidUser)
+      .get("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .end(function (err, res) {
@@ -110,9 +97,8 @@ describe("[6] GET -/chargers/uidcharger operation requests", () => {
 
   it("200 - OK for admin over admin  /chargers/{{uuidcharger}}", (done) => {
     request
-      .get("/chargers/" + uidAdmin)
+      .get("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .end(function (err, res) {
@@ -126,29 +112,10 @@ describe("[6] GET -/chargers/uidcharger operation requests", () => {
       });
   });
 
-  it("200 - OK for user over user  /chargers/{{uidUser}}", (done) => {
+  it("403 - forbiden for user over admin /chargers/{{uuidcharger}}", (done) => {
     request
-      .get("/chargers/" + uidUser)
+      .get("/chargers/" + charger.uid)
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
-      .end(function (err, res) {
-        expect(res).to.have.status(200);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
-      });
-  });
-
-  it("403 - forbiden for user over admin /chargers/{{uidUser}}", (done) => {
-    request
-      .get("/chargers/" + uidAdmin)
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenUser)
       .end(function (err, res) {

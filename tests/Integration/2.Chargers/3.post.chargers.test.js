@@ -14,8 +14,9 @@ chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("[3] POST -/xchargers operation requests", () => {
+describe("[3] POST -/chargers operation requests", () => {
   let tokenAdmin, tokenUser;
+  let uidcharger;
 
   before(async () => {
     const respUser = await api.fetchSinToken(
@@ -30,6 +31,7 @@ describe("[3] POST -/xchargers operation requests", () => {
       "POST"
     );
     tokenAdmin = `token ${respAdmin.jwt}`;
+    //console.log(tokenAdmin);
   });
 
   it("401 - Invalid token /chargers", (done) => {
@@ -80,6 +82,7 @@ describe("[3] POST -/xchargers operation requests", () => {
           "content-type",
           "application/json; charset=utf-8"
         );
+        uidcharger = res.body.charger.uid;
         res.body.message.should.be.eql("Charger registered");
 
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
@@ -101,25 +104,6 @@ describe("[3] POST -/xchargers operation requests", () => {
           "application/json; charset=utf-8"
         );
         res.body.errors.should.be.a("array");
-
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done();
-      });
-  });
-
-  it("409 - wrong charger uid for admin over chargers ", (done) => {
-    request
-      .post("/chargers")
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenAdmin)
-      .send(config.charger_wrong_noUID)
-      .end(function (err, res) {
-        expect(res).to.have.status(409);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
 
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done();
@@ -164,5 +148,15 @@ describe("[3] POST -/xchargers operation requests", () => {
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done();
       });
+  });
+  after(async () => {
+    const dataAdmin = { data: {}, token: tokenAdmin };
+
+    const deleteResult = await api.fetchToken(
+      `chargers/${uidcharger}`,
+      dataAdmin,
+      "DELETE"
+    );
+    // console.log(tokenAdmin);
   });
 });

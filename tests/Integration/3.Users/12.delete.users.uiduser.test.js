@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("[12] DELETE -/users/uiduser operation requests", () => {
+describe("[12] DELETE -/xusers/uiduser operation requests", () => {
   let tokenAdmin, tokenUser;
   let uidAdmin, uidUser;
 
@@ -39,7 +39,7 @@ describe("[12] DELETE -/users/uiduser operation requests", () => {
 
   it(`401 - bad request /users/{{uidAdmin}}`, (done) => {
     request
-      .delete("/users/" + uidAdmin)
+      .delete("/users/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -57,7 +57,7 @@ describe("[12] DELETE -/users/uiduser operation requests", () => {
 
   it("400 - Unexpected string admin over admin /users/{{uidAdmin}}", (done) => {
     request
-      .delete("/users/" + uidAdmin)
+      .delete("/users/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -99,7 +99,7 @@ describe("[12] DELETE -/users/uiduser operation requests", () => {
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenUser)
-      .send(config.user_ok_1)
+      .send()
       .end(function (err, res) {
         expect(res).to.have.status(401);
         expect(res).to.have.header(
@@ -143,18 +143,18 @@ describe("[12] DELETE -/users/uiduser operation requests", () => {
       });
   });
 
-  it("401 - Could not verify token, for admin over admin  /users/{{uidAdmin}}", (done) => {
-    request
-      .delete("/users/" + uidAdmin)
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenAdmin)
-      .end(function (err, res) {
-        expect(res).to.have.status(401);
-        res.body.message.should.be.eql("Could not verify token");
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
-      });
-  });
+  // it("401 - Could not verify token, for admin over admin  /users/{{uidAdmin}}", (done) => {
+  //   request
+  //     .delete("/users/" + uidUser)
+  //     .set("accept", "application/json")
+  //     .set("Content-Type", "application/json")
+  //     .set("Content-Type", "application/json")
+  //     .set("authorization", tokenUser)
+  //     .end(function (err, res) {
+  //       expect(res).to.have.status(401);
+  //       res.body.message.should.be.eql("Could not verify token");
+  //       expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+  //       done(); // <= Call done to signal callback end
+  //     });
+  // });
 });

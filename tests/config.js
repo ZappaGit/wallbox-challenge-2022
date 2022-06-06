@@ -56,17 +56,52 @@ module.exports = {
     passwordConfirmation: "123456",
     role: "user",
   },
+  charger_ok_PulsarPlus2: {
+    uid: ulid(),
+    serialNumber: "623456789",
+    model: "Pulsar Plus",
+  },
   charger_ok_PulsarPlus: {
     uid: ulid(),
+    serialNumber: "323456789",
+    model: "Commander",
+  },
+  charger_ok_Commander5: {
+    uid: ulid(),
+    serialNumber: "423456717",
+    model: "Commander",
+  },
+  charger_ok_Commander4: {
+    uid: ulid(),
+    serialNumber: "323456715",
+    model: "Commander",
+  },
+  charger_ok_Commander3: {
+    uid: ulid(),
+    serialNumber: "323456712",
+    model: "Commander",
+  },
+  charger_ok_Commander: {
+    uid: ulid(),
+    serialNumber: "323456789",
+    model: "Commander",
+  },
+  charger_ok_Commander2: {
+    uid: ulid(),
+    serialNumber: "423456789",
+    model: "Commander",
+  },
+  charger_ok_quasar: {
+    serialNumber: "223456789",
+    model: "Quasar",
+  },
+  charger_wrongModel: {
+    uid: ulid(),
     serialNumber: "123456789",
-    model: "Pulsar Plus",
+    model: "patata",
   },
   charger_ok_noSerialNumber: {
     uid: ulid(),
-    model: "Pulsar Plus",
-  },
-  charger_wrong_noUID: {
-    serialNumber: "123456789",
     model: "Pulsar Plus",
   },
 };
