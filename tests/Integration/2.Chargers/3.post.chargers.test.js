@@ -1,52 +1,40 @@
-/* TEST: put.users.uuiduser.test.js */
+/* TEST: post.chargers.test.js */
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const should = require("chai").should(); //actually call the function
 const expect = require("chai").expect;
+const api = require("../../api");
 
 const config = require("../../config");
 
-const lowdb = require("lowdb");
-const storage = require("lowdb/file-sync");
-
 const { Users } = require("../../../db");
-
-const db = lowdb(config.db, {
-  storage: storage,
-});
 
 chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("get-users-uiduser operation requests", () => {
+describe("[3] POST -/xchargers operation requests", () => {
   let tokenAdmin, tokenUser;
-  let uidAdmin, uidUser;
 
-  before(() => {
-    tokenAdmin = db("tokens").find({ role: "admin" });
-    tokenUser = db("tokens").find({ role: "user" });
-    if (tokenAdmin) {
-      tokenAdmin = tokenAdmin.token;
-    }
-    if (tokenUser) {
-      tokenUser = tokenUser.token;
-    }
-
-    uidAdmin = db("users").find({ role: "admin" });
-    uidUser = db("users").find({ role: "user" });
-    if (uidAdmin) {
-      uidAdmin = uidAdmin.uid;
-    }
-    if (uidUser) {
-      uidUser = uidUser.uid;
-    }
-    console.log(uidAdmin);
+  before(async () => {
+    const respUser = await api.fetchSinToken(
+      "signin",
+      Users.find((user) => user.role === "user"),
+      "POST"
+    );
+    tokenUser = `token ${respUser.jwt}`;
+    const respAdmin = await api.fetchSinToken(
+      "signin",
+      Users.find((user) => user.role === "admin"),
+      "POST"
+    );
+    tokenAdmin = `token ${respAdmin.jwt}`;
   });
-  it(`401 - bad request /users/{{uidAdmin}}`, (done) => {
+
+  it("401 - Invalid token /chargers", (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .post("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -62,31 +50,11 @@ describe("get-users-uiduser operation requests", () => {
       });
   });
 
-  it("400 - Unexpected string admin over admin /users/{{uidAdmin}}", (done) => {
+  it("400 - Unexpected string /chargers", (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .post("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenAdmin)
-      .send("something", "error")
-      .end(function (err, res) {
-        expect(res).to.have.status(400);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
-      });
-  });
-  it("400 - Unexpected string user over user /users/{{uidUser}}", (done) => {
-    request
-      .get("/users/" + uidUser)
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
       .send("something", "error")
       .end(function (err, res) {
         expect(res).to.have.status(400);
@@ -99,75 +67,102 @@ describe("get-users-uiduser operation requests", () => {
       });
   });
 
-  it("200 - OK for admin over user /users/{{uidUser}}", (done) => {
+  it("200 - OK for admin over chargers ", (done) => {
     request
-      .get("/users/" + uidUser)
+      .post("/chargers")
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
+      .send(config.charger_ok_PulsarPlus)
       .end(function (err, res) {
         expect(res).to.have.status(200);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
+        res.body.message.should.be.eql("Charger registered");
+
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
+        done();
       });
   });
 
-  it("200 - OK for admin over admin  /users/{{uidAdmin}}", (done) => {
+  it("400 - wrong without serial number for admin over chargers ", (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .post("/chargers")
       .set("accept", "application/json")
-      .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
+      .send(config.charger_ok_noSerialNumber)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(400);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
+        res.body.errors.should.be.a("array");
+
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
+        done();
       });
   });
 
-  it("200 - OK for user over user  /users/{{uidUser}}", (done) => {
+  it("409 - wrong charger uid for admin over chargers ", (done) => {
     request
-      .get("/users/" + uidUser)
+      .post("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
+      .set("authorization", tokenAdmin)
+      .send(config.charger_wrong_noUID)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(409);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
+
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
+        done();
       });
   });
 
-  it("403 - forbiden for user over admin /users/{{uidUser}}", (done) => {
+  it("409 - Serial number already in use, for admin over chargers ", (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .post("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
+      .set("authorization", tokenAdmin)
+      .send(config.charger_ok_PulsarPlus)
       .end(function (err, res) {
-        res.should.have.status(403);
+        expect(res).to.have.status(409);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
+        res.body.message.should.be.eql("Serial number already in use");
+
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
+        done();
+      });
+  });
+
+  it("401 - Insufficient permissions - for user over chargers ", (done) => {
+    request
+      .post("/chargers")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenUser)
+      .send(config.user_ok_1)
+      .end(function (err, res) {
+        expect(res).to.have.status(401);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        res.body.message.should.be.eql("Insufficient permissions");
+
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done();
       });
   });
 });

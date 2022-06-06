@@ -1,4 +1,4 @@
-/* TEST: get.users.uuiduser.test.js */
+/* TEST: delete.charger.uuiduser.test.js */
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
@@ -7,46 +7,39 @@ const expect = require("chai").expect;
 
 const config = require("../../config");
 
-const lowdb = require("lowdb");
-const storage = require("lowdb/file-sync");
-
+const api = require("../../api");
 const { Users } = require("../../../db");
-
-const db = lowdb(config.db, {
-  storage: storage,
-});
 
 chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("get-users-uiduser operation requests", () => {
+describe("[5] DELETE -/chargers/uidcharger operation requests", () => {
   let tokenAdmin, tokenUser;
   let uidAdmin, uidUser;
 
-  before(() => {
-    tokenAdmin = db("tokens").find({ role: "admin" });
-    tokenUser = db("tokens").find({ role: "user" });
-    if (tokenAdmin) {
-      tokenAdmin = tokenAdmin.token;
-    }
-    if (tokenUser) {
-      tokenUser = tokenUser.token;
-    }
+  before(async () => {
+    const respUser = await api.fetchSinToken(
+      "signin",
+      Users.find((user) => user.role === "user"),
+      "POST"
+    );
 
-    uidAdmin = db("users").find({ role: "admin" });
-    uidUser = db("users").find({ role: "user" });
-    if (uidAdmin) {
-      uidAdmin = uidAdmin.uid;
-    }
-    if (uidUser) {
-      uidUser = uidUser.uid;
-    }
-    console.log(uidAdmin);
+    tokenUser = `token ${respUser.jwt}`;
+    uidUser = respUser.uid;
+    const respAdmin = await api.fetchSinToken(
+      "signin",
+      Users.find((user) => user.role === "admin"),
+      "POST"
+    );
+    tokenAdmin = `token ${respAdmin.jwt}`;
+    uidAdmin = respAdmin.uid;
+    //console.log(tokenAdmin, uidAdmin, tokenUser, uidUser);
   });
-  it(`401 - bad request /users/{{uidAdmin}}`, (done) => {
+
+  it(`401 - bad request /chargers/{{uidAdmin}}`, (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .delete("/chargers/" + uidAdmin)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -62,9 +55,9 @@ describe("get-users-uiduser operation requests", () => {
       });
   });
 
-  it("400 - Unexpected string admin over admin /users/{{uidAdmin}}", (done) => {
+  it("400 - Unexpected string admin over admin /chargers/{{uidAdmin}}", (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .delete("/chargers/" + uidAdmin)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -80,9 +73,9 @@ describe("get-users-uiduser operation requests", () => {
         done(); // <= Call done to signal callback end
       });
   });
-  it("400 - Unexpected string user over user /users/{{uidUser}}", (done) => {
+  it("400 - Unexpected string user over user /chargers/{{uidUser}}", (done) => {
     request
-      .get("/users/" + uidUser)
+      .delete("/chargers/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -99,73 +92,67 @@ describe("get-users-uiduser operation requests", () => {
       });
   });
 
-  it("200 - OK for admin over user /users/{{uidUser}}", (done) => {
+  it("401 - Insufficient permissions - for user over user /chargers", (done) => {
     request
-      .get("/users/" + uidUser)
+      .delete("/chargers/" + uidUser)
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenUser)
+      .send(config.user_ok_1)
+      .end(function (err, res) {
+        expect(res).to.have.status(401);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        res.body.message.should.be.eql("Insufficient permissions");
+
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done();
+      });
+  });
+
+  it("204 - OK for admin over user /chargers/{{uidUser}}", (done) => {
+    request
+      .delete("/chargers/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
+        expect(res).to.have.status(204);
+
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done(); // <= Call done to signal callback end
       });
   });
 
-  it("200 - OK for admin over admin  /users/{{uidAdmin}}", (done) => {
+  it("404 - User not found for admin over user /chargers/{{uidUser}}", (done) => {
     request
-      .get("/users/" + uidAdmin)
+      .delete("/chargers/" + uidUser)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
+        expect(res).to.have.status(404);
+        res.body.message.should.be.eql("User not found");
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done(); // <= Call done to signal callback end
       });
   });
 
-  it("200 - OK for user over user  /users/{{uidUser}}", (done) => {
+  it("401 - Could not verify token, for admin over admin  /chargers/{{uidAdmin}}", (done) => {
     request
-      .get("/users/" + uidUser)
+      .delete("/chargers/" + uidAdmin)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
+      .set("authorization", tokenAdmin)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
-        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done(); // <= Call done to signal callback end
-      });
-  });
-
-  it("403 - forbiden for user over admin /users/{{uidUser}}", (done) => {
-    request
-      .get("/users/" + uidAdmin)
-      .set("accept", "application/json")
-      .set("Content-Type", "application/json")
-      .set("Content-Type", "application/json")
-      .set("authorization", tokenUser)
-      .end(function (err, res) {
-        res.should.have.status(403);
-        expect(res).to.have.header(
-          "content-type",
-          "application/json; charset=utf-8"
-        );
+        expect(res).to.have.status(401);
+        res.body.message.should.be.eql("Could not verify token");
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done(); // <= Call done to signal callback end
       });

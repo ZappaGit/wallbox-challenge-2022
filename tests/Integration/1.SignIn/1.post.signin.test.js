@@ -6,23 +6,16 @@ const should = require("chai").should(); //actually call the function
 const expect = require("chai").expect;
 
 const config = require("../../config");
-
-const storage = require("lowdb/file-sync");
-const lowdb = require("lowdb");
+const api = require("../../api");
 
 const { Users } = require("../../../db");
-
-const db = lowdb(config.db, {
-  storage: storage,
-});
+const miUser = Users.find((user) => user.role === "user");
+const miAdmin = Users.find((user) => user.role === "user");
 
 chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
-describe("signin operation", () => {
-  before(() => {
-    db("tokens").remove();
-  });
+describe("[1] POST - /signin operation", () => {
   it("400 - bad request", (done) => {
     request
       .post("/signin")
@@ -43,34 +36,43 @@ describe("signin operation", () => {
       });
   });
 
-  it("200 - OK - for User", (done) => {
-    const miUser = Users.find((user) => user.role === "user");
+  it("401 -  Wrong email or password (wrong email)", (done) => {
     request
       .post("/signin")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
-      .send(miUser)
+      .send(config.user_without_confirms)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(401);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        res.body.email.should.be.eql(miUser.email);
-        res.body.uid.should.be.a("string");
-        res.body.jwt.should.be.a("string");
-        db("tokens").push({
-          token: `token ${res.body.jwt}`,
-          role: "user",
-          timestamp: Date.now(),
-        });
+        res.body.message.should.be.eql("Wrong email or password");
         done(); // <= Call done to signal callback end
       });
   });
 
-  it("200 - OK - for Admin", (done) => {
-    const miUser = Users.find((user) => user.role === "admin");
+  it("401 -  Wrong email or password (wrong password)", (done) => {
+    request
+      .post("/signin")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .send(config.admin_wrong_password)
+      .end(function (err, res) {
+        expect(res).to.have.status(401);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        res.body.message.should.be.eql("Wrong email or password");
+        done(); // <= Call done to signal callback end
+      });
+  });
+
+  it(`200 - OK - for User: ${miUser.email}`, (done) => {
     request
       .post("/signin")
       .set("accept", "application/json")
@@ -86,11 +88,28 @@ describe("signin operation", () => {
         res.body.email.should.be.eql(miUser.email);
         res.body.uid.should.be.a("string");
         res.body.jwt.should.be.a("string");
-        db("tokens").push({
-          token: `token ${res.body.jwt}`,
-          role: "admin",
-          timestamp: Date.now(),
-        });
+
+        done(); // <= Call done to signal callback end
+      });
+  });
+
+  it(`200 - OK - for Admin: ${miAdmin.email}`, (done) => {
+    request
+      .post("/signin")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .send(miAdmin)
+      .end(function (err, res) {
+        expect(res).to.have.status(200);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        res.body.email.should.be.eql(miAdmin.email);
+        res.body.uid.should.be.a("string");
+        res.body.jwt.should.be.a("string");
+
         done(); // <= Call done to signal callback end
       });
   });

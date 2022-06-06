@@ -2,19 +2,12 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const config = require("./config");
 
-const storage = require("lowdb/file-sync");
-const lowdb = require("lowdb");
-
-const db = lowdb(config.db, {
-  storage: storage,
-});
-
 const expect = require("chai").expect;
 chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("running", () => {
+describe(`[0] running at: ${config.baseUrl}`, () => {
   it("running", (done) => {
     request.get("/").end(function (err, res) {
       expect(res).to.have.status(200);

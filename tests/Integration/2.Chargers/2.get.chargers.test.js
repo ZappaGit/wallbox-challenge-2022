@@ -1,4 +1,4 @@
-/* TEST: get.users.test.js */
+/* TEST: get.chargers.test.js */
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
@@ -7,36 +7,34 @@ const expect = require("chai").expect;
 
 const config = require("../../config");
 
-const lowdb = require("lowdb");
-const storage = require("lowdb/file-sync");
+const api = require("../../api");
 
 const { Users } = require("../../../db");
-
-const db = lowdb(config.db, {
-  storage: storage,
-});
 
 chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("get-users operation requests", () => {
+describe("[2] GET -/chargers operation requests", () => {
   let tokenAdmin, tokenUser;
 
-  before(() => {
-    tokenAdmin = db("tokens").find({ role: "admin" });
-    tokenUser = db("tokens").find({ role: "user" });
-    if (tokenAdmin) {
-      tokenAdmin = tokenAdmin.token;
-    }
-    if (tokenUser) {
-      tokenUser = tokenUser.token;
-    }
-    db("users").remove();
+  before(async () => {
+    const respUser = await api.fetchSinToken(
+      "signin",
+      Users.find((user) => user.role === "user"),
+      "POST"
+    );
+    tokenUser = `token ${respUser.jwt}`;
+    const respAdmin = await api.fetchSinToken(
+      "signin",
+      Users.find((user) => user.role === "admin"),
+      "POST"
+    );
+    tokenAdmin = `token ${respAdmin.jwt}`;
   });
-  it("401 - bad request /users", (done) => {
+  it("401 - Invalid token /chargers", (done) => {
     request
-      .get("/users")
+      .get("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -52,9 +50,9 @@ describe("get-users operation requests", () => {
       });
   });
 
-  it("400 - Unexpected string /users", (done) => {
+  it("400 - Unexpected string /chargers", (done) => {
     request
-      .get("/users")
+      .get("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -70,9 +68,9 @@ describe("get-users operation requests", () => {
       });
   });
 
-  it("200 - OK for admin over user /users", (done) => {
+  it("200 - OK for admin over chargers /chargers", (done) => {
     request
-      .get("/users")
+      .get("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -83,20 +81,15 @@ describe("get-users operation requests", () => {
           "content-type",
           "application/json; charset=utf-8"
         );
-        res.body.users
-          .map((e) => e.role)
-          .should.to.include.members(["admin", "user"]);
-        res.body.users.forEach((u) => {
-          db("users").push(u);
-        });
+
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done();
       });
   });
 
-  it("200 - OK for user over user /users", (done) => {
+  it("200 - OK for user over chargers /chargers", (done) => {
     request
-      .get("/users")
+      .get("/chargers")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -108,10 +101,6 @@ describe("get-users operation requests", () => {
           "application/json; charset=utf-8"
         );
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        res.body.users.map((e) => e.role).should.to.include.members(["user"]);
-        res.body.users
-          .map((e) => e.role)
-          .should.to.not.include.members(["admin"]);
 
         done(); // <= Call done to signal callback end
       });

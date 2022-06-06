@@ -1,27 +1,21 @@
-/* TEST: post.users.test.js */
+/* TEST: get.users.test.js */
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const should = require("chai").should(); //actually call the function
 const expect = require("chai").expect;
-const api = require("../../api");
 
 const config = require("../../config");
 
-const lowdb = require("lowdb");
-const storage = require("lowdb/file-sync");
+const api = require("../../api");
 
 const { Users } = require("../../../db");
-
-const db = lowdb(config.db, {
-  storage: storage,
-});
 
 chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("post-users operation requests", () => {
+describe("[9] GET -/users operation requests", () => {
   let tokenAdmin, tokenUser;
 
   before(async () => {
@@ -37,12 +31,10 @@ describe("post-users operation requests", () => {
       "POST"
     );
     tokenAdmin = `token ${respAdmin.jwt}`;
-    db("users").remove();
   });
-
   it("401 - bad request /users", (done) => {
     request
-      .post("/users")
+      .get("/users")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .send()
@@ -60,7 +52,7 @@ describe("post-users operation requests", () => {
 
   it("400 - Unexpected string /users", (done) => {
     request
-      .post("/users")
+      .get("/users")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
@@ -78,63 +70,46 @@ describe("post-users operation requests", () => {
 
   it("200 - OK for admin over user /users", (done) => {
     request
-      .post("/users")
+      .get("/users")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
-      .send(config.user_ok_2)
       .end(function (err, res) {
         expect(res).to.have.status(200);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
-        res.body.message.should.be.eql("User registered");
+        res.body.users
+          .map((e) => e.role)
+          .should.to.include.members(["admin", "user"]);
 
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
         done();
       });
   });
 
-  it("401 - Insufficient permissions - for user over user /users", (done) => {
+  it("200 - OK for user over user /users", (done) => {
     request
-      .post("/users")
+      .get("/users")
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenUser)
-      .send(config.user_ok_1)
       .end(function (err, res) {
-        expect(res).to.have.status(401);
+        res.should.have.status(200);
         expect(res).to.have.header(
           "content-type",
           "application/json; charset=utf-8"
         );
-        res.body.message.should.be.eql("Insufficient permissions");
-
         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-        done();
+        res.body.users.map((e) => e.role).should.to.include.members(["user"]);
+        res.body.users
+          .map((e) => e.role)
+          .should.to.not.include.members(["admin"]);
+
+        done(); // <= Call done to signal callback end
       });
   });
-
-  //   it("409 - OK for user over user /users", (done) => {
-  //     request
-  //       .post("/users")
-  //       .set("accept", "application/json")
-  //       .set("Content-Type", "application/json")
-  //       .set("Content-Type", "application/json")
-  //       .set("authorization", tokenUser)
-  //       .send(config.user_ok_2)
-  //       .end(function (err, res) {
-  //         res.should.have.status(200);
-  //         expect(res).to.have.header(
-  //           "content-type",
-  //           "application/json; charset=utf-8"
-  //         );
-  //         expect(res).to.have.header("Access-Control-Allow-Origin", "*");
-  //         res.body.message.should.be.eql("Email already in use");
-  //         done(); // <= Call done to signal callback end
-  //       });
-  //   });
 });

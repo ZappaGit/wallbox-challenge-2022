@@ -1,15 +1,4 @@
 {
-  "tokens": [
-    {
-      "token": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI1V0FEMU1aUjNROVo5MEdNNCIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NDQzMTYwLCJleHAiOjE2NTQ0NDY3NjB9.wG5dqVi1zeHysI7ZfSR30_eFGJh9PchjeRlI_st8x4A",
-      "role": "user",
-      "timestamp": 1654443160508
-    },
-    {
-      "token": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI0TlFHMUg3MEQ0NEVWQzI3VyIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ0NDMxNjAsImV4cCI6MTY1NDQ0Njc2MH0.fjDWuGxfn0pUzDH2uFxvrXNVvBek2x17lzdt8R0WCbA",
-      "role": "admin",
-      "timestamp": 1654443160515
-    }
-  ],
+  "tokens": [],
   "users": []
 }
