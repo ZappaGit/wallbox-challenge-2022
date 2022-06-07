@@ -18,6 +18,20 @@ module.exports = {
     passwordConfirmation: "12345678",
     role: "user",
   },
+  user_ok_3: {
+    emailConfirmation: "carlos@mail.com",
+    email: "carlos@mail.com",
+    password: "12345678",
+    passwordConfirmation: "12345678",
+    role: "user",
+  },
+  user_ok_4: {
+    emailConfirmation: "xavier@mail.com",
+    email: "xavier@mail.com",
+    password: "12345678",
+    passwordConfirmation: "12345678",
+    role: "user",
+  },
   user_update_to_admin: {
     role: "admin",
   },
@@ -25,7 +39,7 @@ module.exports = {
     role: "user",
   },
   user_update_email: {
-    email: "mateo@mail.com",
+    email: "patata@mail.com",
   },
   user_update_password: {
     password: "12345678",
@@ -34,6 +48,7 @@ module.exports = {
     email: "mateokk",
   },
   user_update_wrong_password: {
+    email: "juan@mail.com",
     password: "123456",
   },
   user_without_confirms: {
