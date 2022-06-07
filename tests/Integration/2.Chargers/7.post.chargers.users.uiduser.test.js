@@ -42,7 +42,7 @@ describe("[7] POST -/chargers/{uidcharger}/users/{uiduser} operation requests", 
   });
 
   it("401 - Invalid token /chargers/{uidcharger}/user/{uiduser}", (done) => {
-    console.log("/chargers/" + charger.uid + "/users/" + uidUser);
+    //.log("/chargers/" + charger.uid + "/users/" + uidUser);
     request
       .post("/chargers/" + charger.uid + "/users/" + uidUser)
       .set("accept", "application/json")

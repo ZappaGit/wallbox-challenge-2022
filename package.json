@@ -6,8 +6,10 @@
   "scripts": {
     "build": "npm install",
     "start": "node app.js",
-    "tests-i": "mocha --config ./mocha.integration.config -S --reporter mochawesome --reporter-options reportDir=./tests/Integration/reports/",
-    "test": "mocha --config ./mocha.config -g ",
+    "tests:i": "mocha --config ./mocha.integration.config -S --reporter mochawesome --reporter-options reportDir=./tests/Integration/reports/",
+    "tests:e2e": "mocha --config ./mocha.e2e.config -S --reporter mochawesome --reporter-options reportDir=./tests/E2E/reports/",
+    "test:i": "mocha --config ./mocha.integration.config -g ",
+    "test:e2e": "mocha --config ./mocha.e2e.config -g ",
     "swagger-autogen": "node swagger.js"
   },
   "repository": {

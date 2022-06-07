@@ -4,6 +4,7 @@ const { ulid } = require("ulid");
 module.exports = {
   baseUrl: "http://localhost:3000",
   db: path.join(__dirname, "./db/db.json"),
+
   user_ok_1: {
     emailConfirmation: "mateo@mail.com",
     email: "mateo@mail.com",
@@ -12,8 +13,8 @@ module.exports = {
     role: "user",
   },
   user_ok_2: {
-    emailConfirmation: "mateo@mail.com",
-    email: "mateo@mail.com",
+    emailConfirmation: "laia@mail.com",
+    email: "laia@mail.com",
     password: "12345678",
     passwordConfirmation: "12345678",
     role: "user",
@@ -32,6 +33,7 @@ module.exports = {
     passwordConfirmation: "12345678",
     role: "user",
   },
+
   user_update_to_admin: {
     role: "admin",
   },
@@ -78,8 +80,8 @@ module.exports = {
   },
   charger_ok_PulsarPlus: {
     uid: ulid(),
-    serialNumber: "323456789",
-    model: "Commander",
+    serialNumber: "323156789",
+    model: "Pulsar Plus",
   },
   charger_ok_Commander5: {
     uid: ulid(),

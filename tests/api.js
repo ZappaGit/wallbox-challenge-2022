@@ -36,11 +36,11 @@ const fetchToken = async (endpoint, data, method = "GET") => {
   } else {
     if (method === "DELETE") {
       const resp = await fetch(url, {
+        method,
         headers: {
           Authorization: data.token,
         },
       });
-      console.log(data.token);
       return;
     }
     const resp = await fetch(url, {
