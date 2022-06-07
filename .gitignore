@@ -23,7 +23,7 @@ coverage
 *.lcov
 
 # mocha testing artifacts
-mochawesome-report
+reports
 
 # nyc test coverage
 .nyc_output

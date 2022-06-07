@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm install",
     "start": "node app.js",
-    "tests": "mocha --config ./mocha.config -S --reporter mochawesome",
+    "tests-i": "mocha --config ./mocha.integration.config -S --reporter mochawesome --reporter-options reportDir=./tests/Integration/reports/",
     "test": "mocha --config ./mocha.config -g ",
     "swagger-autogen": "node swagger.js"
   },
