@@ -1,4 +1,4 @@
-[![Node.js CI](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/node.js.yml/badge.svg)](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/node.js.yml/badge.svg)](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/integration.yml)
 
 # Demo app for wallbox-challenge-2022
 
