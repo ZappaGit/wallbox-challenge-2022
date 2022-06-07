@@ -1,4 +1,5 @@
 [![Node.js CI](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/integration.yml/badge.svg)](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/integration.yml)
+[![Node.js CI](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/e2e.yml/badge.svg)](https://github.com/ZappaGit/wallbox-challenge-2022/actions/workflows/e2e.yml)
 
 # Wallbox-challenge-2022
 
