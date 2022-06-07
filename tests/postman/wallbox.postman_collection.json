@@ -34,6 +34,11 @@
 						"key": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0VzlXVEc3RDRDQlZOMjYzUEZIOUY2RiIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NTEyMzE4LCJleHAiOjE2NTQ1MTU5MTh9.9MlGHtxrLkdjCd6EQaB5rGGH6JyixZSwKKXUo0ULTEc",
+						"type": "text"
 					}
 				],
 				"body": {
@@ -84,10 +89,16 @@
 			"response": []
 		},
 		{
-			"name": "chargers",
+			"name": "chargers user",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0VzlXVEc3RDRDQlZOMjYzUEZIOUY2RiIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NTEyMzUwLCJleHAiOjE2NTQ1MTU5NTB9.PEqeuWJK4xBpJTEzs909-eE8HmLEyWI70ZQ8Re30Vis",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:3000/chargers/",
 					"protocol": "http",
@@ -107,7 +118,22 @@
 			"name": "chargers",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0V0I3NUtLUVZBQUNENVA4RDRBSjE4UCIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ1MTM4NDQsImV4cCI6MTY1NDUxNzQ0NH0.EnpO_rdBFPbP8MmLdtadaSbjd7AuldgYN0aycMUusvk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ uid: '01G4WB9WHRZCW640BMZ4D1X12B', model: 'Pulsar Plus' }"
+				},
 				"url": {
 					"raw": "http://localhost:3000/chargers/",
 					"protocol": "http",
@@ -127,7 +153,13 @@
 			"name": "chargers/{uidcharger}",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0V05FTlBOTjEzWlZFN1RKR1pLRkhQSCIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ1Mjg5NzEsImV4cCI6MTY1NDUzMjU3MX0.N62ONp7d9yS0SjU4ivs-49u_9ACoeZhIFY8IwoaODTU",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:3000/chargers/{{uidcharger}}",
 					"protocol": "http",
@@ -147,9 +179,19 @@
 			"name": "chargers/{uidcharger}",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0V0dORllHTTdOS1M3V0sxOUtGN0QyNyIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ1MTk0NTMsImV4cCI6MTY1NDUyMzA1M30.T4QEoByGtvFbPujESEuO8rUW95Nr2RXkNrvZd7iO6D0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"serialNumber\": \"123456789\",\r\n    \"model\": \"\"\r\n  }"
+				},
 				"url": {
-					"raw": "http://localhost:3000/chargers/{{uidcharger}}",
+					"raw": "http://localhost:3000/chargers/01G4WGPNN73JBZRG0BSJ2T8RW6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -157,7 +199,7 @@
 					"port": "3000",
 					"path": [
 						"chargers",
-						"{{uidcharger}}"
+						"01G4WGPNN73JBZRG0BSJ2T8RW6"
 					]
 				}
 			},
@@ -167,7 +209,41 @@
 			"name": "chargers/{uidcharger}/users/{uiduser}",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0V1ZOUENaVzZOMDBGME4zUDFTSzc5QSIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ1MzEwMTgsImV4cCI6MTY1NDUzNDYxOH0.6BZObAnV57xVda5uI2qC9UpmEvpw_MLI0ZI3wCsCmj4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/chargers/{{uidcharger}}/users/{{uidcharger}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"chargers",
+						"{{uidcharger}}",
+						"users",
+						"{{uidcharger}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "chargers/{uidcharger}/users/{uiduser} Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0V1ZOUENaVzZOMDBGME4zUDFTSzc5QSIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ1MzEwMTgsImV4cCI6MTY1NDUzNDYxOH0.6BZObAnV57xVda5uI2qC9UpmEvpw_MLI0ZI3wCsCmj4",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:3000/chargers/{{uidcharger}}/users/{{uidcharger}}",
 					"protocol": "http",
@@ -222,13 +298,13 @@
 					},
 					{
 						"key": "authorization",
-						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI1V0FEMU1aUjNROVo5MEdNNCIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NDI5MTU3LCJleHAiOjE2NTQ0MzI3NTd9.8XJaIBamyMoft2tspaX7f-9I4d1nnPLuk8h9yy3DlKQ",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI1V0FEMU1aUjNROVo5MEdNNCIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NDM4ODYzLCJleHAiOjE2NTQ0NDI0NjN9.tI8YkCR_jBeqU6V1cPTytt4Y8MmjUNoBTfhdDAkgsyU",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"kk\": \"diego@mail.com\"\r\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:3000/users",
@@ -259,7 +335,7 @@
 					},
 					{
 						"key": "authorization",
-						"value": "{{authorization_admin\n}}",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI0TlFHMUg3MEQ0NEVWQzI3VyIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ0NDI5MDMsImV4cCI6MTY1NDQ0NjUwM30.GyW1Nidwo4H3WNDGlULJWvDpsXOHyeLQw8I4ZjofBYk",
 						"type": "text"
 					}
 				],
@@ -290,11 +366,16 @@
 						"key": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI0TlFHMUg3MEQ0NEVWQzI3VyIsImVtYWlsIjoiYWRtaW5Ad2FsbGJveC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NTQ0NDI1NDEsImV4cCI6MTY1NDQ0NjE0MX0.3qP1Tfc2TyCH7sQqCWrOfLOYINAm2avtPTYaM-3chZ4",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"diego@mail.com\",\r\n  \"password\": \"123456\",\r\n  \"role\":\"user\"\r\n}"
+					"raw": "{\r\n  \"emailConfirmation\": \"patata@mail.com\",  \r\n  \"email\": \"patata@mail.com\",\r\n  \"password\": \"12345678\",\r\n  \"passwordConfirmation\": \"12345678\",\r\n  \"role\":\"user\"\r\n}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/users",
@@ -363,9 +444,15 @@
 			"name": "users/{uiduser}",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "authorization",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0VzBQVDQ2WTlDTlFOUjZNOVJEVFdWOSIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NTAyNzQ5LCJleHAiOjE2NTQ1MDYzNDl9.9JoxOxxOVhZz844xFEFWmmen1RlnfFaMwQelyoDHSNw",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:3000/users/{{uiduser}}",
+					"raw": "http://localhost:3000/users/01G4VZZSX2FRV6F3866YWNT9A6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -373,7 +460,7 @@
 					"port": "3000",
 					"path": [
 						"users",
-						"{{uiduser}}"
+						"01G4VZZSX2FRV6F3866YWNT9A6"
 					]
 				}
 			},
@@ -394,7 +481,7 @@
 					},
 					{
 						"key": "authorization",
-						"value": "{{authorization_admin\n}}",
+						"value": "token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMUc0TVlEWjI1V0FEMU1aUjNROVo5MEdNNCIsImVtYWlsIjoidXNlckB3YWxsYm94LmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU0NDM4ODYzLCJleHAiOjE2NTQ0NDI0NjN9.tI8YkCR_jBeqU6V1cPTytt4Y8MmjUNoBTfhdDAkgsyU",
 						"type": "text"
 					}
 				],
@@ -403,7 +490,7 @@
 					"raw": "{\r\n  \"email\": \"diego@mail.com\",\r\n  \"password\": \"123456\",\r\n  \"role\":\"user\"\r\n}"
 				},
 				"url": {
-					"raw": "http://{{hostname}}:{{port}}/users/{{uiduser}}",
+					"raw": "http://{{hostname}}:{{port}}/users/01G4MYDZ24NQG1H70D44EVC27W",
 					"protocol": "http",
 					"host": [
 						"{{hostname}}"
@@ -411,7 +498,7 @@
 					"port": "{{port}}",
 					"path": [
 						"users",
-						"{{uiduser}}"
+						"01G4MYDZ24NQG1H70D44EVC27W"
 					]
 				}
 			},

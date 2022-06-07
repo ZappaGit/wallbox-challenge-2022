@@ -48,3 +48,7 @@ npm run test:e2e --args "<testName>"
 ## Check results report
 
 Use your Live Server in path `./tests/{E2E|Integration}/reports/mochawesome `
+
+## Postman file
+
+Use your Postman client to import file `./tests/postman/wallbox.postman_collection.json`
