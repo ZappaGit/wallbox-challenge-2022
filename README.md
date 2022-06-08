@@ -48,9 +48,9 @@ npm run test:e2e --args "<testName>"
 
 ## Link to test plans
 
-[Integration](https://github.com/ZappaGit/wallbox-challenge-2022).
+[Integration](https://github.com/ZappaGit/wallbox-challenge-2022/blob/main/tests/Integration/testplanI.md).
 
-[E2E](https://github.com/ZappaGit/wallbox-challenge-2022).
+[E2E](https://github.com/ZappaGit/wallbox-challenge-2022/blob/main/tests/E2E/testPlan.md).
 
 ## Check results report
 
