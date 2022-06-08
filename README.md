@@ -46,6 +46,12 @@ run individual E2E test
 npm run test:e2e --args "<testName>"
 ```
 
+## Link to test plans
+
+[Integration](https://github.com/ZappaGit/wallbox-challenge-2022).
+
+[E2E](https://github.com/ZappaGit/wallbox-challenge-2022).
+
 ## Check results report
 
 Use your Live Server in path `./tests/{E2E|Integration}/reports/mochawesome `
