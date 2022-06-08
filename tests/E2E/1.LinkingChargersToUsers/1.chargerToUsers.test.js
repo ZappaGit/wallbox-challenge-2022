@@ -22,9 +22,11 @@ chai.use(chaiHttp);
 const request = chai.request(config.baseUrl);
 
 describe("[1] linking one charger to 4 users", () => {
+  let tokenUser;
   let tokenAdmin;
   let uidusers = [];
   let uidcharger;
+  let users;
 
   before("admin signin", async () => {
     const respAdmin = await api.fetchSinToken(
@@ -36,7 +38,7 @@ describe("[1] linking one charger to 4 users", () => {
     db("users").remove();
     db("chargers").remove();
 
-    let users = [
+    users = [
       config.user_ok_1,
       config.user_ok_2,
       config.user_ok_3,
@@ -114,12 +116,50 @@ describe("[1] linking one charger to 4 users", () => {
     done();
   });
 
-  it("Step4, check charger state", (done) => {
+  it("Step4, admin check charger state", (done) => {
     request
       .get("/chargers/" + uidcharger)
       .set("accept", "application/json")
       .set("Content-Type", "application/json")
       .set("authorization", tokenAdmin)
+      .end(function (err, res) {
+        expect(res).to.have.status(200);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        //console.log(res.body);
+        res.body.users.should.be.lengthOf(4);
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done(); // <= Call done to signal callback end
+      });
+  });
+
+  it("Step5, user signin", (done) => {
+    request
+      .post("/signin/")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .send(users[0])
+      .end(function (err, res) {
+        expect(res).to.have.status(200);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        console.log(res.body);
+        tokenUser = `token ${res.body.jwt}`;
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done(); // <= Call done to signal callback end
+      });
+  });
+
+  it("Step6, user check charger state", (done) => {
+    request
+      .get("/chargers/" + uidcharger)
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenUser)
       .end(function (err, res) {
         expect(res).to.have.status(200);
         expect(res).to.have.header(

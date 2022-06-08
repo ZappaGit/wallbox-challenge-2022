@@ -21,10 +21,12 @@ chai.use(chaiHttp);
 
 const request = chai.request(config.baseUrl);
 
-describe("[2] linking 4 chargers to a user", () => {
+describe("[2] xlinking 4 chargers to a user", () => {
   let tokenAdmin;
   let uidchargers = [];
   let uiduser;
+  let tokenUser2;
+  let uiduser2;
 
   before("admin signin", async () => {
     const respUser = await api.fetchSinToken(
@@ -131,8 +133,67 @@ describe("[2] linking 4 chargers to a user", () => {
       });
   });
 
+  it("Step5, create user2 ", (done) => {
+    request
+      .post("/users/")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .send(config.user_ok_1)
+      .set("authorization", tokenAdmin)
+      .end(function (err, res) {
+        expect(res).to.have.status(200);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        //console.log(res.body);
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done();
+      });
+  });
+
+  it("Step6, user2  signin", (done) => {
+    request
+      .post("/signin/")
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .send(config.user_ok_1)
+      .end(function (err, res) {
+        expect(res).to.have.status(200);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        //console.log(res.body);
+        tokenUser2 = `token ${res.body.jwt}`;
+        uiduser2 = res.body.uid;
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done(); // <= Call done to signal callback end
+      });
+  });
+
+  it("Step7, user2 check charger state and get Cannot access that resource", (done) => {
+    request
+      .get("/chargers/" + uidchargers[1])
+      .set("accept", "application/json")
+      .set("Content-Type", "application/json")
+      .set("authorization", tokenUser2)
+      .end(function (err, res) {
+        expect(res).to.have.status(403);
+        expect(res).to.have.header(
+          "content-type",
+          "application/json; charset=utf-8"
+        );
+        //console.log(res.body);
+        res.body.message.should.to.be.eql("Cannot access that resource");
+        expect(res).to.have.header("Access-Control-Allow-Origin", "*");
+        done(); // <= Call done to signal callback end
+      });
+  });
+
   after("return state", async () => {
     const dataAdmin = { data: {}, token: tokenAdmin };
+    await api.fetchToken(`users/${uiduser2}`, dataAdmin, "DELETE");
     uidchargers.forEach(async (uid) => {
       await api.fetchToken("chargers/" + uid, dataAdmin, "DELETE");
     });
